@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class Ring {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n;
+
+        System.out.print("Enter number of processes: ");
+        n = sc.nextInt();
+
+        int processes[] = new int[n];
+
+        for(int i = 0; i < n; i++) {
+            processes[i] = i + 1;
+        }
+
+        System.out.print("Enter process initiating election: ");
+        int initiator = sc.nextInt();
+
+        System.out.println("Election message passing:");
+
+        for(int i = initiator; i < n; i++) {
+            System.out.println("Process " + processes[i] + " sends message");
+        }
+
+        for(int i = 0; i < initiator; i++) {
+            System.out.println("Process " + processes[i] + " sends message");
+        }
+
+        System.out.println("Process " + n + " becomes Coordinator");
+
+        sc.close();
+    }
+}
