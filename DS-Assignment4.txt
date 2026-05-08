@@ -1,0 +1,104 @@
+package Assignment4;
+
+import java.io.*;
+import java.net.*;
+
+public class Client {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // Connect to server
+            Socket s = new Socket("localhost", 5000);
+
+            System.out.println("Connected to Server");
+
+            // Input and Output streams
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(s.getInputStream()));
+
+            PrintWriter pw = new PrintWriter(
+                    s.getOutputStream(), true);
+
+            // Client Time
+            int clientTime = 200;
+
+            System.out.println("Client Time: " + clientTime);
+
+            // Send client time to server
+            pw.println(clientTime);
+
+            // Receive synchronized time
+            int syncTime = Integer.parseInt(br.readLine());
+
+            System.out.println("Updated Time: " + syncTime);
+
+            // Close connection
+            s.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+============================================================================================================================================================================================
+
+
+
+package Assignment4;
+
+import java.io.*;
+import java.net.*;
+
+public class Server {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // Create server socket
+            ServerSocket ss = new ServerSocket(5000);
+
+            System.out.println("Server Started...");
+            System.out.println("Waiting for Client...");
+
+            // Accept client
+            Socket s = ss.accept();
+
+            System.out.println("Client Connected");
+
+            // Input and Output streams
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(s.getInputStream()));
+
+            PrintWriter pw = new PrintWriter(
+                    s.getOutputStream(), true);
+
+            // Server Time
+            int serverTime = 100;
+
+            System.out.println("Server Time: " + serverTime);
+
+            // Receive Client Time
+            int clientTime = Integer.parseInt(br.readLine());
+
+            System.out.println("Client Time: " + clientTime);
+
+            // Calculate Average Time
+            int averageTime = (serverTime + clientTime) / 2;
+
+            System.out.println("Synchronized Time: " + averageTime);
+
+            // Send synchronized time to client
+            pw.println(averageTime);
+
+            // Close connection
+            s.close();
+            ss.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}

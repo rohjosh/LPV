@@ -1,0 +1,125 @@
+package Assignment2;
+
+import java.io.*;
+import java.net.*;
+
+public class Client {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // Step 1: Connect to Server
+            Socket socket = new Socket("localhost", 5000);
+
+            System.out.println("Connected to Server");
+
+            // Step 2: Read input from keyboard
+            BufferedReader userInput = new BufferedReader(
+                    new InputStreamReader(System.in));
+
+            // Step 3: Send message to server
+            PrintWriter pw = new PrintWriter(
+                    socket.getOutputStream(), true);
+
+            // Step 4: Read response from server
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+
+            String msg;
+
+            // Step 5: Communication Loop
+            while (true) {
+
+                // Enter message
+                System.out.print("Enter Message: ");
+                msg = userInput.readLine();
+
+                // Send message to server
+                pw.println(msg);
+
+                // Exit condition
+                if (msg.equalsIgnoreCase("Exit")) {
+                    System.out.println("Connection closed.");
+                    break;
+                }
+
+                // Receive echo from server
+                String response = br.readLine();
+
+                // Display server response
+                System.out.println("Server says: " + response);
+            }
+
+            // Step 6: Close connection
+            socket.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+============================================================================================================================================================================================
+
+
+
+package Assignment2;
+
+import java.io.*;
+import java.net.*;
+
+public class Server {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // Step 1: Create Server Socket
+            ServerSocket server = new ServerSocket(5000);
+
+            System.out.println("Server started...");
+            System.out.println("Waiting for client...");
+
+            // Step 2: Accept Client Connection
+            Socket socket = server.accept();
+
+            System.out.println("Client connected!");
+
+            // Step 3: Take Input From Client
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+
+            // Step 4: Send Output To Client
+            PrintWriter pw = new PrintWriter(
+                    socket.getOutputStream(), true);
+
+            String msg;
+
+            // Step 5: Communication Loop
+            while (true) {
+
+                // Read message from client
+                msg = br.readLine();
+
+                // Exit condition
+                if (msg.equalsIgnoreCase("Exit")) {
+                    System.out.println("Client disconnected.");
+                    break;
+                }
+
+                // Display client message
+                System.out.println("Client says: " + msg);
+
+                // Send same message back to client
+                pw.println("Echo: " + msg);
+            }
+
+            // Step 6: Close connections
+            socket.close();
+            server.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
